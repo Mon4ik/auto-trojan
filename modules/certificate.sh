@@ -15,14 +15,15 @@ install_acme(){
 
 issue_using_dns_api() {
     whiptail --title "Warning" --msgbox "Make sure your domain name vendor (or to be precise your domain name's NS) is present in the following list, This is required for issuing HTTPS Certificate. (you need to ensure that domain name A resolution has been successful)" 15 68
-    APIOPTION=$(whiptail --nocancel --clear --title "Choose DNS API" --menu --separate-output "Please select your DNS provider (Use Arrow key to choose)" 15 68 6 \
+    APIOPTION=$(whiptail --nocancel --clear --title "Choose DNS API" --menu --separate-output "Please select your DNS provider (Use Arrow key to choose)" 15 68 7 \
 "1" "Cloudflare" \
 "2" "Namesilo" \
 "3" "Aliyun" \
 "4" "DNSPod.cn" \
 "5" "CloudXNS.com" \
 "6" "GoDaddy" \
-"7" "Name.com" 3>&1 1>&2 2>&3)
+"7" "Name.com" \
+"8" "Timeweb" 3>&1 1>&2 2>&3)
 
     case $APIOPTION in
         1)
@@ -116,6 +117,18 @@ rm mycron
         export Namecom_Token="$Namecom_Token"
         install_acme
         ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt --issue --dns dns_namecom --cert-home /etc/certs -d $domain -k ec-256 --log --reloadcmd "systemctl reload trojan nginx || true"
+crontab -l > mycron
+echo "0 0 * * * /root/.acme.sh/acme.sh --server letsencrypt --cron --cert-home /etc/certs --reloadcmd 'systemctl restart trojan nginx  || true' &> /root/auto-trojan/letcron.log 2>&1" >> mycron
+crontab mycron
+rm mycron
+        ;;
+        7)
+        while [[ -z $TW_Token ]]; do
+        TW_Token=$(whiptail --passwordbox --nocancel "https://timeweb.cloud/my/api-keys，Enter your Timeweb API Token" 8 68 --title "TW_Token input" 3>&1 1>&2 2>&3)
+        done
+        export TW_Token="$TW_Token"
+        install_acme
+        ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt --issue --dns dns_timeweb --cert-home /etc/certs -d $domain -k ec-256 --log --reloadcmd "systemctl reload trojan nginx || true"
 crontab -l > mycron
 echo "0 0 * * * /root/.acme.sh/acme.sh --server letsencrypt --cron --cert-home /etc/certs --reloadcmd 'systemctl restart trojan nginx  || true' &> /root/auto-trojan/letcron.log 2>&1" >> mycron
 crontab mycron
