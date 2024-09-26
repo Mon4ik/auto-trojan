@@ -50,11 +50,11 @@ echo "City: $my_city"
 
 color_echo ${INFO} "Downloading Modules..."
 cd /root/auto-trojan/
-wget -q https://raw.githubusercontent.com/Mon4ik/auto-trojan/main/modules/certificate.sh
-wget -q https://raw.githubusercontent.com/Mon4ik/auto-trojan/main/modules/trojan.sh
-wget -q https://raw.githubusercontent.com/Mon4ik/auto-trojan/main/modules/nginx.sh
-wget -q https://raw.githubusercontent.com/Mon4ik/auto-trojan/main/modules/nginx-config.sh
-wget -q https://raw.githubusercontent.com/Mon4ik/auto-trojan/main/modules/decoy.sh
+wget -q https://raw.githubusercontent.com/Mon4ik/auto-trojan/feat/timeweb-dns/modules/certificate.sh
+wget -q https://raw.githubusercontent.com/Mon4ik/auto-trojan/feat/timeweb-dns/modules/trojan.sh
+wget -q https://raw.githubusercontent.com/Mon4ik/auto-trojan/feat/timeweb-dns/modules/nginx.sh
+wget -q https://raw.githubusercontent.com/Mon4ik/auto-trojan/feat/timeweb-dns/modules/nginx-config.sh
+wget -q https://raw.githubusercontent.com/Mon4ik/auto-trojan/feat/timeweb-dns/modules/decoy.sh
 
 
 while [[ -z ${domain} ]]; do
